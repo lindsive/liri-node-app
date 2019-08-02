@@ -1,16 +1,16 @@
 // require npms
 var axios = require("axios");
-var Spotify = require('node-spotify-api');
-
-
-var spotify = new Spotify(keys.spotify);
-
+var Spotify = require("node-spotify-api");
 
 var dotenv = require('dotenv').config();
 var keys = require("./keys.js");
+var spotify = new Spotify(keys.spotify);
+
+
+
 
 var command = process.argv[2];
-var search = process.argv[3];
+var search = process.argv.slice(3).join(" ");
 
 // bands in town api
 var bandsAPI = "https://rest.bandsintown.com/artists/" + search + "/events?app_id=codingbootcamp"
@@ -30,9 +30,10 @@ var bandsAPI = "https://rest.bandsintown.com/artists/" + search + "/events?app_i
 
 
 function concert() {
-
+console.log(bandsAPI)
     axios.get(bandsAPI).then(
         function(response) {
+            console.log(response.data)
             for (var i = 0; i < response.data.length; i++) {
             console.log(response.data[i])
             console.log("test")
