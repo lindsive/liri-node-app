@@ -1,6 +1,8 @@
 // questions:
 // moment.js for concert();
-// default for song() "spotify-this-song command"
+// default for song() "spotify-this-song command" and movie "movie-this"
+// rotten tomatoes rat
+// run function from txt
 
 
 // require npms/files
@@ -11,18 +13,19 @@ moment().format();
 var dotenv = require('dotenv').config();
 var keys = require("./keys.js");
 var spotify = new Spotify(keys.spotify);
+var fs = require("fs");
 
 // command like vars
 var command = process.argv[2];
 var search = process.argv.slice(3).join(" ");
-var musicArtist = process.argv.slice(4).join(" ");
 
-// COMMAND "concert-this"
-// bands in town api
+
+// APIs
 var bandsAPI = "https://rest.bandsintown.com/artists/" + search + "/events?app_id=codingbootcamp"
+var omdb = "https://www.omdbapi.com/?t=" + search + "&y=&plot=short&apikey=trilogy"
 
 
-// COMMAND "concert-this function"
+//"concert-this" function
 function concert() {
     axios.get(bandsAPI).then(
         function (response) {
@@ -37,60 +40,72 @@ function concert() {
 
             }
         }).catch(function (error) {
-            console.log(error)
-        })
+        console.log(error)
+    })
 };
 
 
 
 
-// "spotify-this-song"
-// show info abt show in terminal:
-// artist; song name; preview link of song from spotify; album song is from
-// if no song provided, default to "the sign" by Ace of Base
-// will use:
-// node-spotify-api package
-// client and secret IDs needed
-
+// "spotify-this-song function"
 function song() {
-    spotify.search({ type: 'track', query: search }, function (err, data) {
+    spotify.search({
+        type: 'track',
+        query: search
+    }, function (err, data) {
 
         if (err) {
+
             return console.log('Error occurred: ' + err);
 
         } else {
-        var results = data.tracks.items
-        for (i = 0; i < results.length; i++) {
-            // console.log(results[i]);
-            console.log("========================");
-            console.log("Artist: " + results[i].artists[0].name);
-            console.log("Song name: " + results[i].name)
-            console.log("Album: " + results[i].album.name);
-            console.log("Link to Spotify: " + results[i].external_urls.spotify);
-        }
-    }
-    });
-}
+            var results = data.tracks.items
+            for (i = 0; i < results.length; i++) {
 
+                console.log("========================");
+                console.log("Artist: " + results[i].artists[0].name);
+                console.log("Song name: " + results[i].name);
+                console.log("Album: " + results[i].album.name);
+                console.log("Link to Spotify: " + results[i].external_urls.spotify);
+            };
+        };
+    });
+};
 
 // "movie-this"
-// output in terminal:
-// Title of the movie.
-// Year the movie came out.
-// IMDB Rating of the movie.
-// Rotten Tomatoes Rating of the movie.
-// Country where the movie was produced.
-// Language of the movie.
-// Plot of the movie.
-// Actors in the movie.
-
-// default: "mr. nobody" 
-// with <http://www.imdb.com/title/tt0485947/>
-// it's on netflix!
-// usee axios package to retrieve from ombd api
+function movie() {
+    axios.get(omdb).then(
+        function (response) {
+            // console.log(response);
+            console.log("Title: " + response.data.Title);
+            console.log("Release Year: " + response.data.Year);
+            console.log("IMDB Rating: " + response.data.imdbRating);
+            console.log("Produced in: " + response.data.Country);
+            console.log("Language: " + response.data.Language);
+            console.log("Plot: " + response.data.Plot);
+            console.log("Cast: " + response.data.Actors);
+        }
+    )
+}
 
 // "do-what-it-says"
 // fs.readFile random.txt
+
+function read() {
+    fs.readFile("random.txt", "utf8", function (err, data) {
+        if (err) {
+            return console.log(err);
+        }
+        // console.log(data);
+        var dataArr = data.split(",");
+        console.log(dataArr);
+
+        dataArr = [command, search];
+
+
+    });
+};
+
 
 switch (command) {
     case "concert-this":
@@ -99,6 +114,10 @@ switch (command) {
     case "spotify-this-song":
         song();
         break;
-
+    case "movie-this":
+        movie();
+        break;
+    case "do-what-it-says":
+        read();
+        break;
 }
-
