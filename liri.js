@@ -1,7 +1,5 @@
 // questions:
 // moment.js for concert();
-// default for song() "spotify-this-song command" and movie "movie-this"
-// rotten tomatoes rat
 // run function from txt
 
 
@@ -22,7 +20,6 @@ var search = process.argv.slice(3).join(" ");
 
 // APIs
 var bandsAPI = "https://rest.bandsintown.com/artists/" + search + "/events?app_id=codingbootcamp"
-var omdb = "https://www.omdbapi.com/?t=" + search + "&y=&plot=short&apikey=trilogy"
 
 
 //"concert-this" function
@@ -31,11 +28,13 @@ function concert() {
         function (response) {
 
             for (var i = 0; i < response.data.length; i++) {
-                console.log("Artist: " + response.data[i].lineup[i]);
-                console.log("Venue: " + response.data[i].venue.name + ", in " + response.data[i].venue.city + ", " + response.data[i].venue.region);
-
+                // console.log("Artist: " + response.data[i].lineup[i]);
+                // console.log("Venue: " + response.data[i].venue.name + ", in " + response.data[i].venue.city + ", " + response.data[i].venue.region);
+                var timeTwo = [];
                 var time = response.data[i].datetime
-                console.log("Date: " + time);
+                let timeTest = time.split("T");
+               
+                console.log("Date: " + timeTwo[1]);
                 moment(time, "MM-DD-YYYY");
 
             }
@@ -44,15 +43,13 @@ function concert() {
     })
 };
 
-
-
-
 // "spotify-this-song function"
 function song() {
     spotify.search({
         type: 'track',
         query: search
     }, function (err, data) {
+
 
         if (err) {
 
@@ -74,9 +71,16 @@ function song() {
 
 // "movie-this"
 function movie() {
+    var omdb = "https://www.omdbapi.com/?t=" + search + "&y=&plot=short&apikey=trilogy"
+
+
+    // if (!search) {
+    //     search = "Mr. Nobody"
+    // };
+
+
     axios.get(omdb).then(
         function (response) {
-            // console.log(response);
             console.log("Title: " + response.data.Title);
             console.log("Release Year: " + response.data.Year);
             console.log("IMDB Rating: " + response.data.imdbRating);
@@ -84,25 +88,22 @@ function movie() {
             console.log("Language: " + response.data.Language);
             console.log("Plot: " + response.data.Plot);
             console.log("Cast: " + response.data.Actors);
+            console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value)
         }
     )
 }
 
 // "do-what-it-says"
-// fs.readFile random.txt
 
 function read() {
     fs.readFile("random.txt", "utf8", function (err, data) {
         if (err) {
             return console.log(err);
         }
-        // console.log(data);
         var dataArr = data.split(",");
         console.log(dataArr);
 
         dataArr = [command, search];
-
-
     });
 };
 
@@ -112,9 +113,18 @@ switch (command) {
         concert();
         break;
     case "spotify-this-song":
+        if (!search) {
+            search = "i want it that way"
+
+        }
         song();
         break;
     case "movie-this":
+        if (!search) {
+            search = "jaws"
+
+        }
+        console.log(search)
         movie();
         break;
     case "do-what-it-says":
