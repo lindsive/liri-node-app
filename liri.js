@@ -13,7 +13,7 @@ var keys = require("./keys.js");
 var spotify = new Spotify(keys.spotify);
 var fs = require("fs");
 
-// command like vars
+// command line vars
 var command = process.argv[2];
 var search = process.argv.slice(3).join(" ");
 
@@ -28,12 +28,13 @@ function concert() {
         function (response) {
 
             for (var i = 0; i < response.data.length; i++) {
-                // console.log("Artist: " + response.data[i].lineup[i]);
-                // console.log("Venue: " + response.data[i].venue.name + ", in " + response.data[i].venue.city + ", " + response.data[i].venue.region);
+                console.log("Artist: " + response.data[i].lineup[i]);
+                console.log("Venue: " + response.data[i].venue.name + ", in " + response.data[i].venue.city + ", " + response.data[i].venue.region);
+
                 var timeTwo = [];
                 var time = response.data[i].datetime
                 let timeTest = time.split("T");
-               
+
                 console.log("Date: " + timeTwo[1]);
                 moment(time, "MM-DD-YYYY");
 
@@ -73,12 +74,6 @@ function song() {
 function movie() {
     var omdb = "https://www.omdbapi.com/?t=" + search + "&y=&plot=short&apikey=trilogy"
 
-
-    // if (!search) {
-    //     search = "Mr. Nobody"
-    // };
-
-
     axios.get(omdb).then(
         function (response) {
             console.log("Title: " + response.data.Title);
@@ -107,7 +102,7 @@ function read() {
     });
 };
 
-
+// switch case
 switch (command) {
     case "concert-this":
         concert();
