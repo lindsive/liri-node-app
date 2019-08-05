@@ -28,16 +28,13 @@ function concert() {
         function (response) {
 
             for (var i = 0; i < response.data.length; i++) {
+                
+                var date = moment(response.data[0].datetime).format("MM/DD/YYYY");
+                
                 console.log("Artist: " + response.data[i].lineup[i]);
                 console.log("Venue: " + response.data[i].venue.name + ", in " + response.data[i].venue.city + ", " + response.data[i].venue.region);
-
-                var timeTwo = [];
-                var time = response.data[i].datetime
-                let timeTest = time.split("T");
-
-                console.log("Date: " + timeTwo[1]);
-                moment(time, "MM-DD-YYYY");
-
+                console.log("On: " + date);
+                
             }
         }).catch(function (error) {
         console.log(error)
