@@ -1,5 +1,4 @@
-// questions:
-// moment.js for concert();
+// questions;
 // run function from txt
 
 
@@ -8,7 +7,7 @@ var axios = require("axios");
 var Spotify = require("node-spotify-api");
 var moment = require('moment');
 moment().format();
-var dotenv = require('dotenv').config();
+require('dotenv').config();
 var keys = require("./keys.js");
 var spotify = new Spotify(keys.spotify);
 var fs = require("fs");
@@ -28,13 +27,13 @@ function concert() {
         function (response) {
 
             for (var i = 0; i < response.data.length; i++) {
-                
+
                 var date = moment(response.data[0].datetime).format("MM/DD/YYYY");
-                
+
                 console.log("Artist: " + response.data[i].lineup[i]);
                 console.log("Venue: " + response.data[i].venue.name + ", in " + response.data[i].venue.city + ", " + response.data[i].venue.region);
                 console.log("On: " + date);
-                
+
             }
         }).catch(function (error) {
         console.log(error)
@@ -80,7 +79,7 @@ function movie() {
             console.log("Language: " + response.data.Language);
             console.log("Plot: " + response.data.Plot);
             console.log("Cast: " + response.data.Actors);
-            console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value)
+            console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
         }
     )
 }
@@ -92,10 +91,14 @@ function read() {
         if (err) {
             return console.log(err);
         }
-        var dataArr = data.split(",");
-        console.log(dataArr);
-
-        dataArr = [command, search];
+        // var dataArr = data.split(",");
+        // let search = dataArr[1]; 
+        // let command = dataArr[0]; 
+        // console.log(dataArr);
+        console.log(data);
+        song(data);
+        
+        
     });
 };
 
@@ -107,7 +110,6 @@ switch (command) {
     case "spotify-this-song":
         if (!search) {
             search = "i want it that way"
-
         }
         song();
         break;
@@ -120,6 +122,9 @@ switch (command) {
         movie();
         break;
     case "do-what-it-says":
+    if (!search) {
+        search = "i want it that way"
+    }
         read();
         break;
 }
