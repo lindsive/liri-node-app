@@ -3,7 +3,7 @@
 LIRI is a CLI app that takes in a user's search parameter, and return them the search results.  
 
 The purpose if LIRI is to help the user find information on a song, music artist, or movie, all in one place. 
-All the user needs, is to type in one of the commands and what they are searching for. 
+All the user needs to do is to type in one of the commands and what they are searching for. 
 
 This LIRI app utilizes Node, API calls, NPMs, and JavaScript.
 
